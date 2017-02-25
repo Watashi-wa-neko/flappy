@@ -34,6 +34,7 @@
 				this.pointsTimer = 0;
 
 				this.game.input.mouse.capture = true;
+				this.game.input.onTap.add(this.flyJump, this);
 
 				this.mooh = this.add.sprite(70, 70, 'mooh');
 				this.mooh.anchor.set(0.5);
@@ -108,13 +109,19 @@
 				this.restartBtn.scale.set(0.5);
 				this.restartBtn.anchor.set(0.5);
 		},
-		update: function () {
-				if (this.game.input.activePointer.leftButton.isDown && game.time.now > this.jumpTimer && !this.gameOver){
+		flyJump: function () {
+				if (game.time.now > this.jumpTimer && !this.gameOver){
 						this.mooh.animations.play('fly');
 						this.mooh.body.velocity.y = -250;
 						this.jumpTimer = game.time.now + 250;
 						this.flySound.play();
 				}
+		},
+		update: function () {
+				if (this.game.input.activePointer.leftButton.isDown){
+					this.flyJump();
+				}
+				
 				this.game.physics.arcade.collide(this.mooh, this.topPipe, this.hitWorldBounds, null, this);
 				this.game.physics.arcade.collide(this.mooh, this.bottomPipe, this.hitWorldBounds, null, this);
 
