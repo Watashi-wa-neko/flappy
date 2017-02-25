@@ -11,8 +11,18 @@
 				this.load.image('topPipe', 'img/top.png');
 				this.load.image('bottomPipe', 'img/bottom.png');
 				this.load.image('btn', 'img/btn.png');
+
+				this.load.audio('flySound', 'sounds/JUMP1.wav');
+				this.load.audio('flyDie', 'sounds/DEATH.wav');
+				this.load.audio('btnSound', 'sounds/STEP.wav');
+				this.load.audio('completeSound', 'sounds/OVER_BARREL.wav');
 		}, 
 		create: function () {
+				this.flySound = this.add.audio('flySound');
+				this.flyDie = this.add.audio('flyDie');
+				this.btnSound = this.add.audio('btnSound');
+				this.completeSound = this.add.audio('completeSound');
+
 				this.points = 0;
 				this.gameOver = false;
 
@@ -63,6 +73,7 @@
 				this.text = this.game.add.text(10, 5, this.points++, { font: "normal 32px Arial", fill: "#435072", boundsAlignH: "center", boundsAlignV: "middle" });
 		},
 		restartGame: function () {
+			this.btnSound.play();
 			game.state.start('GameState');
 		},
 		createPipes: function () {
@@ -83,6 +94,10 @@
 				this.pipesAnimate.onComplete.add(this.pipesAnimateFunction, this);
 		},
 		hitWorldBounds: function () {
+				if(!this.gameOver){
+					this.flyDie.play();
+				}
+
 				this.gameOver = true;
 				
 				this.floorAnimate.pause();
@@ -98,11 +113,13 @@
 						this.mooh.animations.play('fly');
 						this.mooh.body.velocity.y = -250;
 						this.jumpTimer = game.time.now + 250;
+						this.flySound.play();
 				}
 				this.game.physics.arcade.collide(this.mooh, this.topPipe, this.hitWorldBounds, null, this);
 				this.game.physics.arcade.collide(this.mooh, this.bottomPipe, this.hitWorldBounds, null, this);
 
 				if(this.pipes.x <= 0 && game.time.now > this.pointsTimer){
+					this.completeSound.play();
 					this.text.setText(this.points++);
 					this.pointsTimer = game.time.now + 3000;
 				}
@@ -116,12 +133,15 @@ var StartState = {
 		preload: function () {
 			this.load.image('title', 'img/title.png');
 			this.load.image('btn', 'img/btn.png');
+			this.load.audio('btnSound', 'sounds/STEP.wav');
 		},
 		create: function () {
+			this.btnSound = this.add.audio('btnSound');
 			this.title = this.add.image(0, 0, 'title');
 			this.game.add.button(game.world.centerX - 72, 380, 'btn', this.startGame, this, 2, 1, 0);
 		}, 
 		startGame: function () {
+			this.btnSound.play();
 			game.state.start('GameState');
 		}
 };
