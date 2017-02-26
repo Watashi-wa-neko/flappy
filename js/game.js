@@ -2,7 +2,7 @@
 		init: function () {
 				this.scale.pageAlignHorizontally = true;
 				this.game.physics.startSystem(Phaser.Physics.ARCADE);
-				this.game.physics.arcade.gravity.y = 400;
+				this.game.physics.arcade.gravity.y = 1000;
 		},
 		preload: function () {
 				this.load.spritesheet('mooh', 'img/mooh.png', 208.7, 300, 9);
@@ -112,7 +112,7 @@
 		flyJump: function () {
 				if (game.time.now > this.jumpTimer && !this.gameOver){
 						this.mooh.animations.play('fly');
-						this.mooh.body.velocity.y = -250;
+						this.mooh.body.velocity.y = -350;
 						this.jumpTimer = game.time.now + 250;
 						this.flySound.play();
 				}
