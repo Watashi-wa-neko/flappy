@@ -112,20 +112,25 @@
 		flyJump: function () {
 				if (game.time.now > this.jumpTimer && !this.gameOver){
 						this.mooh.animations.play('fly');
+						this.game.add.tween(this.mooh).to( { angle: -45 }, 1000, Phaser.Easing.Linear.None, true);
 						this.mooh.body.velocity.y = -350;
 						this.jumpTimer = game.time.now + 250;
 						this.flySound.play();
+						
 				}
 		},
 		update: function () {
 				if (this.game.input.activePointer.leftButton.isDown){
 					this.flyJump();
+				}else{
+					this.mooh.animations.play('die');
+					this.game.add.tween(this.mooh).to( { angle: 45 }, 1000, Phaser.Easing.Linear.None, true);
 				}
 				
 				this.game.physics.arcade.collide(this.mooh, this.topPipe, this.hitWorldBounds, null, this);
 				this.game.physics.arcade.collide(this.mooh, this.bottomPipe, this.hitWorldBounds, null, this);
 
-				if(this.pipes.x <= 0 && game.time.now > this.pointsTimer){
+				if((this.pipes.x <= 0 && game.time.now > this.pointsTimer) && !this.gameOver){
 					this.completeSound.play();
 					this.text.setText(this.points++);
 					this.pointsTimer = game.time.now + 3000;
