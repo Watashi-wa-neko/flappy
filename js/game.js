@@ -49,7 +49,6 @@
 		this.mooh.body.onWorldBounds = new Phaser.Signal();
 		this.mooh.body.onWorldBounds.add(this.hitWorldBounds, this);
 
-		console.log(this.mooh.body);
     this.mooh.body.setSize(205, 240, 0, 40);
 
 		this.topPipe = this.add.sprite(0, 0, 'topPipe');
